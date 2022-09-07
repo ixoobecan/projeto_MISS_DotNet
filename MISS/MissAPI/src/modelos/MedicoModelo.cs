@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MissAPI.Src.modelos.Enum;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MissAPI.Src.modelos
@@ -9,8 +10,8 @@ namespace MissAPI.Src.modelos
    /// <para>Data: 06/09/2022</para>
    /// </summary>
 
-    [Table("tb_Doacao")]
-    public class DoacaoModelo
+    [Table("tb_medico")]
+    public class Medico
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -21,13 +22,11 @@ namespace MissAPI.Src.modelos
 
         public string Contato { get; set; }
 
-        public int  Dias { get; set; }
-
-        public int Hora { get; set; }
+        public int DataHora { get; set; }
 
         public string Especialidade { get; set; }
 
-        public string CNPJDoador { get; set; }
+        public string CNPJ { get; set; }
 
         public string Localizacao { get; set; }
 

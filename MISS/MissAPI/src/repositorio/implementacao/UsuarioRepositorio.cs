@@ -14,13 +14,13 @@ namespace MissAPI.Src.repositorio.implementacao
     public class UsuarioRepositorio : IUsuario
     {
 
-        #region Attributes
-        private readonly MissAPIContexto _contexto;
+        #region Atributos
+        private readonly MissContexto _contexto;
         #endregion
 
 
-        #region Constructors
-        public UsuarioRepositorio(MissAPIContexto contexto)
+        #region Construtores
+        public UsuarioRepositorio(MissContexto contexto)
         {
             _contexto = contexto;
         }
@@ -33,18 +33,18 @@ namespace MissAPI.Src.repositorio.implementacao
         /// <para>Resumo: Método assíncrono para pegar usuarios</para>
         /// </summary>
         /// <return>Lista UsuarioModelo</return>
-        public async Task<List<UsuarioModelo>> PegarTodosUsuariosAsync()
+        public async Task<List<Usuario>> PegarTodosUsuariosAsync()
         {
             return await _contexto.Usuarios.ToListAsync();
         }
 
         /// <summary>
-        /// <para>Resumo: Método assíncrono para pegar um usuario pelo ID</para>
+        /// <para>Resumo: Método assíncrono para pegar um usuário pelo ID</para>
         /// </summary>
         /// <param name="id">Id do usuario</param>
         /// <return>UsuarioModelo</return>
-        /// <exception cref="Exception">Caso não encontre o usuario</exception>
-        public async Task<UsuarioModelo> PegarUsuarioPeloIdAsync(int id)
+        /// <exception cref="Exception">Caso não encontre o usuário</exception>
+        public async Task<Usuario> PegarUsuarioPeloIdAsync(int id)
         {
             if (!ExisteId(id)) throw new Exception("Id de usuario não encontrado");
 
@@ -59,22 +59,42 @@ namespace MissAPI.Src.repositorio.implementacao
         }
 
         /// <summary>
-        /// <para>Resumo: Método assíncrono para pegar um usuario pelo email</para>
+        /// <para>Resumo: Método assíncrono para pegar um usuário pelo nome</para>
         /// </summary>
-        /// <param name="email">Email do usuario</param>
-        /// <return>UsuarioModelo</return>
-        public async Task<UsuarioModelo> PegarUsuarioPeloEmailAsync(string email)
+        /// <param name="nome">Nome do usuário</param>
+        /// <returns>Usuario</returns>
+        public async Task<Usuario> PegarUsuarioPeloNomeAsync(string nome)
+        {
+            return await _contexto.Usuarios.FirstOrDefaultAsync(n => n.Nome == nome);
+        }
+
+        /// <summary>
+        /// <para>Resumo: Método assíncrono para pegar um usuário pelo email</para>
+        /// </summary>
+        /// <param name="email">Email do usuário</param>
+        /// <return>Usuario</return>
+        public async Task<Usuario> PegarUsuarioPeloEmailAsync(string email)
         {
             return await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
         }
 
         /// <summary>
-        /// <para>Resumo: Método assíncrono para salvar um novo usuario</para>
+        /// <para>Resumo: Método assíncrono para pegar usuário pelo cpf</para>
+        /// </summary>
+        /// <param name="cpf"></param>
+        /// <returns></returns>
+        public async Task<Usuario> PegarUsuarioPeloCPFAsync(string cpf)
+        {
+            return await _contexto.Usuarios.FirstOrDefaultAsync(c => c.CPF == cpf);
+        }
+
+        /// <summary>
+        /// <para>Resumo: Método assíncrono para salvar um novo usuário</para>
         /// </summary>
         /// <param name="usuario">NovoUsuario</param>
         public async Task NovoUsuarioAsync(Usuario usuario)
         {
-            await _contexto.Usuarios.AddAsync(new UsuarioModelo
+            await _contexto.Usuarios.AddAsync(new Usuario
             {
                 Nome = usuario.Nome,
                 Email = usuario.Email,
@@ -82,55 +102,33 @@ namespace MissAPI.Src.repositorio.implementacao
                 Foto = usuario.Foto,
                 Telefone = usuario.Telefone,
                 Endereco = usuario.Endereco,
-                Tipo = usuario.Tipo,
                 CPF = usuario.CPF,
-
+                Tipo = usuario.Tipo
             });
             await _contexto.SaveChangesAsync();
         }
 
         /// <summary>
-        /// <para>Resumo: Método assíncrono para atualizar um usuario</para>
+        /// <para>Resumo: Método assíncrono para atualizar um usuário</para>
         /// </summary>
         /// <param name="usuario">AtualizarUsuario</param>
         public async Task AtualizarUsuarioAsync(Usuario usuario)
         {
-            UsuarioModelo modelo = await PegarUsuarioPeloIdAsync(usuario.Id);
-            modelo.Nome = usuario.Nome;
-            modelo.Email = usuario.Email;
-            modelo.Foto = usuario.Foto;
-            modelo.Telefone = usuario.Telefone;
-            modelo.Endereco = usuario.Endereco;
-            modelo.CPF = usuario.CPF;
-            _contexto.Update(modelo);
+            var aux = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Id == usuario.Id);
+            aux.Nome = usuario.Nome;
+            aux.Email = usuario.Email;
+            aux.Senha = usuario.Senha;
+            aux.Foto = usuario.Foto;
+            aux.Telefone = usuario.Telefone;
+            aux.Endereco = usuario.Endereco;
+            aux.CPF = usuario.CPF;
+
+            _contexto.Update(aux);
             await _contexto.SaveChangesAsync();
         }
 
         /// <summary>
-        /// <para>Resumo: Método assíncrono para atualizar senha de usuario</para>
-        /// </summary>
-        /// <param name="usuario">AtualizarUsuario</param>
-        public async Task AtualizarSenhaUsuarioAsync(Usuario usuario)
-        {
-            var modelo = await PegarUsuarioPeloIdAsync(usuario.Id);
-
-            if (modelo.Senha != CodificarSenha(usuario.SenhaAntiga)) throw new Exception("Senha antiga incorreta");
-
-            modelo.Senha = CodificarSenha(usuario.SenhaNova);
-
-            _contexto.Update(modelo);
-            await _contexto.SaveChangesAsync();
-
-            // função auxiliar
-            string CodificarSenha(string senha)
-            {
-                var bytes = Encoding.UTF8.GetBytes(senha);
-                return Convert.ToBase64String(bytes);
-            }
-        }
-
-        /// <summary>
-        /// <para>Resumo: Método assíncrono para deletar um usuario</para>
+        /// <para>Resumo: Método assíncrono para deletar um usuário</para>
         /// </summary>
         /// <param name="id">Id do usuario</param>
         public async Task DeletarUsuarioAsync(int id)

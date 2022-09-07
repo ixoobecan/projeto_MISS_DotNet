@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MissAPI.Src.modelos
@@ -9,16 +10,18 @@ namespace MissAPI.Src.modelos
     /// <para>Data: 06/09/2022</para>
     /// </summary>
 
-    [Table("tb_Consulta")]
-    public class ConsultaModelo
+    [Table("tb_consulta")]
+    public class Consulta
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [ForeignKey("fk_usuario")]
-        public UsuarioModelo Medico { get; set; }
+        public Usuario Paciente { get; set; }
 
-        [ForeignKey("fk_doacao")]
-        public DoacaoModelo Doacao { get; set; }
+        [ForeignKey("fk_medico")]
+        public  Medico Medico { get; set; }
+
+        public DateTime DataHora { get; set; }
     }
 }

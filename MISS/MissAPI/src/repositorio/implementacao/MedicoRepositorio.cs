@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MissAPI.Src.repositorio.implementacao
 {
-    public class DoacaoRepositorio : IDoacao
+    public class MedicoRepositorio : IMedico
     {
 
         #region Atributos
@@ -19,7 +19,7 @@ namespace MissAPI.Src.repositorio.implementacao
 
 
         #region Construtores
-        public DoacaoRepositorio(MissAPIContexto contexto)
+        public MedicoRepositorio(MissAPIContexto contexto)
         {
             _contexto = contexto;
         }

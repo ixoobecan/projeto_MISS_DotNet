@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MissAPI.Src.modelos;
 using MissAPI.Src.repositorio;
 using System;
 using System.Threading.Tasks;
@@ -17,18 +18,16 @@ namespace MissAPI.Src.controladores
         #endregion
 
         #region Construtores
-        public UsuarioControlador(IUsuario repositorio, IAutenticacao servicos)
+        public UsuarioControlador(IUsuario repositorio)
         {
             _repositorio = repositorio;
-            _servicos = servicos;
         }
         #endregion 
 
         #region Métodos
 
        
-        [HttpGet("todos")]
-        [Authorize]
+        [HttpGet("todosUsuarios")]
         public async Task<ActionResult> PegarTodosUsuariosAsync()
         {
             var lista = await _repositorio.PegarTodosUsuariosAsync();
@@ -38,7 +37,6 @@ namespace MissAPI.Src.controladores
 
        
         [HttpGet("id/{idUsuario}")]
-        [Authorize]
         public async Task<ActionResult> PegarUsuarioPeloIdAsync([FromRoute] int idUsuario)
         {
             try
@@ -47,13 +45,25 @@ namespace MissAPI.Src.controladores
             }
             catch (Exception ex)
             {
-                return NotFound(new { message = ex.Message });
+                return NotFound(new { Mensagem = ex.Message });
             }
         }
 
-       
+        [HttpGet("nome/{nomeUsuario}")]
+        public async Task<ActionResult> PegarUsuarioPeloNomeAsync([FromRoute] string nomeUsuario)
+        {
+            try
+            {
+                return Ok(await _repositorio.PegarUsuarioPeloNomeAsync(nomeUsuario));
+            }
+            catch(Exception ex)
+            {
+                return NotFound(new { Mensagem = ex.Message });
+            }
+        }
+
+
         [HttpGet("email/{emailUsuario}")]
-        [Authorize]
         public async Task<ActionResult> PegarUsuarioPeloEmailAsync([FromRoute] string emailUsuario)
         {
             var usuario = await _repositorio.PegarUsuarioPeloEmailAsync(emailUsuario);
@@ -61,31 +71,30 @@ namespace MissAPI.Src.controladores
             return Ok(usuario);
         }
 
-       
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<ActionResult> NovoUsuarioAsync([FromBody] Usuario usuario)
+        [HttpGet("cpf/{cpfUsuario}")]
+        public async Task<ActionResult> PegarUsuarioPeloCPFAsync([FromRoute] string cpfUsuario)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
             try
             {
-                await _servicos.CriarUsuarioSemDuplicarAsync(usuario);
-                return Created($"api/Usuarios/email/{usuario.Email}", usuario);
+                return Ok(await _repositorio.PegarUsuarioPeloCPFAsync(cpfUsuario));
             }
             catch (Exception ex)
             {
-                return Unauthorized(new { message = ex.Message });
+                return NotFound(new { Mensagem = ex.Message });
             }
         }
 
+        [HttpPost]
+        public async Task<ActionResult> NovoUsuarioAsync([FromBody] Usuario usuario)
+        {
+            await _repositorio.NovoUsuarioAsync(usuario);
+            return Created($"api/Usuarios", usuario);
+        }
+
         
-        [HttpPut("usuario")]
-        [Authorize]
+        [HttpPut]
         public async Task<ActionResult> AtualizarUsuarioAsync([FromBody] Usuario usuario)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
             try
             {
                 await _repositorio.AtualizarUsuarioAsync(usuario);
@@ -93,31 +102,11 @@ namespace MissAPI.Src.controladores
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(new { Mensagem = ex.Message });
             }
         }
-
-       
-        [HttpPut("senha")]
-        [Authorize]
-        public async Task<ActionResult> AtualizarSenhaUsuarioAsync([FromBody] Usuario usuario)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            try
-            {
-                await _repositorio.AtualizarSenhaUsuarioAsync(usuario);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
-        }
-
         
-        [HttpDelete("deletar/{id}")]
-        [Authorize]
+        [HttpDelete("deletarUsuario/{id}")]
         public async Task<ActionResult> DeletarUsuarioAsync([FromRoute] int id)
         {
             try
@@ -127,7 +116,7 @@ namespace MissAPI.Src.controladores
             }
             catch (Exception ex)
             {
-                return NotFound(new { message = ex.Message });
+                return NotFound(new { Mensagem = ex.Message });
             }
         }
 

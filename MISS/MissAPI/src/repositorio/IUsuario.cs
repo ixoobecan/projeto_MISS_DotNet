@@ -11,12 +11,16 @@ namespace MissAPI.Src.repositorio
  /// </summary>
     public interface IUsuario
     {
-        Task<List<UsuarioModelo>> PegarTodosUsuariosAsync();
-        Task<UsuarioModelo> PegarUsuarioPeloIdAsync(int id);
-        Task<UsuarioModelo> PegarUsuarioPeloEmailAsync(string email);
+        Task<List<Usuario>> PegarTodosUsuariosAsync();
+
+        Task<Usuario> PegarUsuarioPeloIdAsync(int id);
+        Task<Usuario> PegarUsuarioPeloNomeAsync(string nome);
+        Task<Usuario> PegarUsuarioPeloEmailAsync(string email);
+        Task<Usuario> PegarUsuarioPeloCPFAsync(string cpf);
+       
         Task NovoUsuarioAsync(Usuario Usuario);
         Task AtualizarUsuarioAsync(Usuario Usuario);
-        Task AtualizarSenhaUsuarioAsync(Usuario Usuario);
+
         Task DeletarUsuarioAsync(int id);
     }
 

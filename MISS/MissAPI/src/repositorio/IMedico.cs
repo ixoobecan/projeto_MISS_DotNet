@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace MissAPI.Src.repositorio
 {
-    public interface IDoacao
+    public interface IMedico
     {
         Task<List<DoacaoModelo>> PegarTodasDoacoesAsync();
         Task<DoacaoModelo> PegarDoacaoPeloIdAsync(int id);
