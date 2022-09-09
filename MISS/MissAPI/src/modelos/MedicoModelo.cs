@@ -1,4 +1,5 @@
 ﻿using MissAPI.Src.modelos.Enum;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,7 +11,7 @@ namespace MissAPI.Src.modelos
    /// <para>Data: 06/09/2022</para>
    /// </summary>
 
-    [Table("tb_medico")]
+    [Table("tb_medicos")]
     public class Medico
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -22,7 +23,7 @@ namespace MissAPI.Src.modelos
 
         public string Contato { get; set; }
 
-        public int DataHora { get; set; }
+        public DateTime DataHora { get; set; }
 
         public string Especialidade { get; set; }
 
@@ -30,7 +31,6 @@ namespace MissAPI.Src.modelos
 
         public string Localizacao { get; set; }
 
-        public StatusDoacao Status { get; set; }
     }
 }
 

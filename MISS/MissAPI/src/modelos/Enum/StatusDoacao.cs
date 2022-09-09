@@ -3,10 +3,9 @@
 namespace MissAPI.Src.modelos.Enum
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum StatusDoacao
+    public enum StatusConsulta
     {
-        PENDENTE,
         ATIVO,
-        INATIVo
+        INATIVO
     }
 }

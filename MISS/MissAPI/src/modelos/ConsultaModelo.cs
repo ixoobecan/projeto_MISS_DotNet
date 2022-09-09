@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MissAPI.Src.modelos.Enum;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,7 +11,7 @@ namespace MissAPI.Src.modelos
     /// <para>Data: 06/09/2022</para>
     /// </summary>
 
-    [Table("tb_consulta")]
+    [Table("tb_consultas")]
     public class Consulta
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -22,6 +23,10 @@ namespace MissAPI.Src.modelos
         [ForeignKey("fk_medico")]
         public  Medico Medico { get; set; }
 
+        [Required]
         public DateTime DataHora { get; set; }
+
+        [Required]
+        public StatusConsulta StatusConulta { get; set; }
     }
 }

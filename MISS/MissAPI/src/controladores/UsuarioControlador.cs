@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MissAPI.Src.modelos;
 using MissAPI.Src.repositorio;
 using System;
@@ -106,12 +105,12 @@ namespace MissAPI.Src.controladores
             }
         }
         
-        [HttpDelete("deletarUsuario/{id}")]
-        public async Task<ActionResult> DeletarUsuarioAsync([FromRoute] int id)
+        [HttpDelete("deletarUsuario/{idUsuario}")]
+        public async Task<ActionResult> DeletarUsuarioAsync([FromRoute] int idUsuario)
         {
             try
             {
-                await _repositorio.DeletarUsuarioAsync(id);
+                await _repositorio.DeletarUsuarioAsync(idUsuario);
                 return NoContent();
             }
             catch (Exception ex)

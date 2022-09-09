@@ -30,7 +30,7 @@ namespace MissAPI.Src.repositorio.implementacao
         #region Metodos
 
         /// <summary>
-        /// <para>Resumo: Método assíncrono para pegar usuarios</para>
+        /// <para>Resumo: Método assíncrono para pegar todos usuarios</para>
         /// </summary>
         /// <return>Lista UsuarioModelo</return>
         public async Task<List<Usuario>> PegarTodosUsuariosAsync()
@@ -46,7 +46,7 @@ namespace MissAPI.Src.repositorio.implementacao
         /// <exception cref="Exception">Caso não encontre o usuário</exception>
         public async Task<Usuario> PegarUsuarioPeloIdAsync(int id)
         {
-            if (!ExisteId(id)) throw new Exception("Id de usuario não encontrado");
+            if (!ExisteId(id)) throw new Exception("Id de usuário não encontrado");
 
             return await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Id == id);
 

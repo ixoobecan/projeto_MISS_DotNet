@@ -6,10 +6,14 @@ namespace MissAPI.Src.repositorio
 {
     public interface IMedico
     {
-        Task<List<DoacaoModelo>> PegarTodasDoacoesAsync();
-        Task<DoacaoModelo> PegarDoacaoPeloIdAsync(int id);
-        Task NovaDoacaoAsync(Doacao doacao);
-        Task AtualizarDoacaoAsync(Doacao doacao);
-        Task DeletarDoacaoAsync(int id);
+        Task<List<Medico>> PegarTodosMedicosAsync();
+
+        Task<Medico> PegarMedicoPeloIdAsync(int id);
+        Task<Medico> PegarMedicoPelaEspecialidadeAsync(string especialidade);
+        Task<Medico> PegarMedicoPeloCNPJAsync(string cnpj);
+
+        Task NovoMedicoAsync(Medico medico);
+        Task AtualizarMedicoAsync(Medico medico);
+        Task DeletarMedicoAsync(int id);
     }
 }
