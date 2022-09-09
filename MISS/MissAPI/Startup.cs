@@ -1,10 +1,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MissAPI.Src.contexto;
+using MissAPI.Src.repositorio;
+using MissAPI.Src.repositorio.implementacao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,24 +25,41 @@ namespace MissAPI
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Config Banco de dados
+            services.AddDbContext<MissContexto>(opt =>
+                opt.UseSqlServer(Configuration["ConnectionStringsDev:DefaultConnection"]));
 
+            // Repositorios
+            services.AddScoped<IUsuario, UsuarioRepositorio>();
+            services.AddScoped<IMedico, MedicoRepositorio>();
+            services.AddScoped<IConsulta, ConsultaRepositorio>();
+
+            // Controladores
+            services.AddCors();
             services.AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MissContexto contexto)
         {
+            // Desenvolvimento
             if (env.IsDevelopment())
             {
+                contexto.Database.EnsureCreated();
                 app.UseDeveloperExceptionPage();
             }
 
+            // Produção
+            contexto.Database.EnsureCreated();
+
+            // Rotas
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseCors(c => c
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseEndpoints(endpoints =>
             {
