@@ -12,14 +12,12 @@ namespace MissAPI.Src.repositorio.implementacao
     {
 
         #region Atributos
-        private readonly MissAPIContexto _contexto;
-
-        public object StatusDoacao { get; private set; }
+        private readonly MissContexto _contexto;
         #endregion
 
 
         #region Construtores
-        public ConsultaRepositorio(MissAPIContexto context)
+        public ConsultaRepositorio(MissContexto context)
         {
             _contexto = context;
         }
@@ -27,78 +25,75 @@ namespace MissAPI.Src.repositorio.implementacao
 
 
         #region Metodos
-         /// <summary>
-        /// <para>Resumo: Método assíncrono para pegar uma consulta pelo Cnpj</para>
+        /// <summary>
+        /// <para>Resumo: Método assíncrono para pegar todas as consultas</para>
         /// </summary>
-        /// <param name="idMedico">Id da consulta</param>
-        /// <return>Lista ConsultaModelo</return>
-        /// <exception cref="Exception">Caso não encontre o Medico</exception>
-        public async Task<List<ConsultaModelo>> PegarConsultaPeloIdMedicoAsync(int idMedico)
+        /// <return>Lista Consulta</return>
+        public async Task<List<Consulta>> PegarTodasConsultasAsync()
         {
-            if (!ExisteId(idMedico)) throw new Exception("Id do Medico não encontrado");
-
             return await _contexto.Consultas
-                .Include(s => s.Medico)
-                .Include(s => s.Doacao)
-                .Where(s => s.Medico.Id == idMedico)
+                .Include(m => m.Medico)
+                .Include(u => u.Usuario)
                 .ToListAsync();
-
-            // função auxiliar
-            bool ExisteId(int idMedico)
-            {
-                var auxiliar = _contexto.Usuarios.FirstOrDefault(u => u.Id == idMedico);
-                return auxiliar != null;
-            }
         }
 
+        public async Task<Consulta> PegarConsultaPeloIdAsync(int idConsulta)
+        {
+            if (!ExisteIdConsulta(idConsulta)) throw new Exception("Id da consulta não encontrado");
+
+            return await _contexto.Consultas
+                .Include(m => m.Medico)
+                .Include(u => u.Usuario)
+                .FirstOrDefaultAsync(c => c.Id == idConsulta);
+
+            bool ExisteIdConsulta(int id)
+            {
+                var aux = _contexto.Consultas.FirstOrDefaultAsync(c => c.Id == id);
+                return aux != null;
+            }
+        }
         /// <summary>
         /// <para>Resumo: Método assíncrono para salvar uma nova consulta</para>
         /// </summary>
         /// <param name="dto">NovaConsultaDTO</param>
         public async Task NovaConsultaAsync(Consulta consulta)
         {
-            if (!ExisteIdMedico(consulta.IdMedico)) throw new Exception("Id da ONG não encontrado");
+            if (!ExisteIdMedico(consulta.Medico.Id)) throw new Exception("Id do médico não encontrado");
 
-            if (!ExisteIdDoacao(consulta.IdDoacao)) throw new Exception("Id da doação não encontrado");
+            if (!ExisteIdUsuario(consulta.Usuario.Id)) throw new Exception("Id do paciente não encontrado");
 
-            await RegraRestaInativa(consulta.IdDoacao);
-
-            await _contexto.Consultas.AddAsync(new ConsultaModelo
+            await _contexto.Consultas.AddAsync(new Consulta
             {
-                Medico = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Id == consulta.IdMedico),
-                Doacao = await _contexto.Doacoes.FirstOrDefaultAsync(d => d.Id == consulta.IdDoacao)
+                Medico = await _contexto.Medicos.FirstOrDefaultAsync(m => m.Id == consulta.Medico.Id),
+                Usuario = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Id == consulta.Usuario.Id),
+                DataHora = consulta.DataHora,
+                StatusConsulta = consulta.StatusConsulta
             });
             await _contexto.SaveChangesAsync();
 
             // função auxiliar
             bool ExisteIdMedico(int idMedico)
             {
-                var auxiliar = _contexto.Usuarios.FirstOrDefault(u => u.Id == idMedico);
+                var auxiliar = _contexto.Medicos.FirstOrDefault(m => m.Id == idMedico);
                 return auxiliar != null;
             }
 
-            bool ExisteIdDoacao(int idDoacao)
+            bool ExisteIdUsuario(int idUsuario)
             {
-                var auxiliar = _contexto.Doacoes.FirstOrDefault(d => d.Id == idDoacao);
+                var auxiliar = _contexto.Usuarios.FirstOrDefault(d => d.Id == idUsuario);
                 return auxiliar != null;
             }
+        }
 
-            async Task RegraRestaInativa(int idDoacao)
-            {
-                var aux1 = await _contexto.Doacoes.FirstOrDefaultAsync(d => d.Id == idDoacao);
-                var result1 = aux1.Dias - aux1.Hora;
+        public async Task AtualizarConsultaAsync(Consulta consulta)
+        {
+            var aux = await _contexto.Consultas.FirstOrDefaultAsync(c => c.Id == consulta.Id);
+            aux.Medico = consulta.Medico;
+            aux.DataHora = consulta.DataHora;
+            aux.StatusConsulta = consulta.StatusConsulta;
 
-                if (result1 <= 0)
-                {
-                    aux1.Dias = 0;
-                    aux1.Status = StatusDoacao.INATIVO;
-                }
-                else
-                {
-                    aux1.Hora = result1;
-                }
-                await _contexto.SaveChangesAsync();
-            }
+            _contexto.Consultas.Update(aux);
+            await _contexto.SaveChangesAsync();
         }
 
         /// <summary>
@@ -119,19 +114,7 @@ namespace MissAPI.Src.repositorio.implementacao
                 return auxiliar != null;
             }
         }
-
-        /// <summary>
-        /// <para>Resumo: Método assíncrono para pegar todas consultas</para>
-        /// </summary>
-        /// <return>Lista ConsultaModelo</return>
-        public async Task<List<ConsultaModelo>> PegarTodasConsultaAsync()
-        {  
-            return await _contexto.Consultas
-                .Include(s => s.Medico)
-                .Include(s => s.Doacao)
-                .ToListAsync();
-        }
         #endregion
     }
-    
+
 }

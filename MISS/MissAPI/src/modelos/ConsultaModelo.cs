@@ -18,7 +18,7 @@ namespace MissAPI.Src.modelos
         public int Id { get; set; }
 
         [ForeignKey("fk_usuario")]
-        public Usuario Paciente { get; set; }
+        public Usuario Usuario { get; set; }
 
         [ForeignKey("fk_medico")]
         public  Medico Medico { get; set; }
@@ -27,6 +27,6 @@ namespace MissAPI.Src.modelos
         public DateTime DataHora { get; set; }
 
         [Required]
-        public StatusConsulta StatusConulta { get; set; }
+        public StatusConsulta StatusConsulta { get; set; }
     }
 }

@@ -6,9 +6,12 @@ namespace MissAPI.Src.repositorio
 {
     public interface IConsulta
     {
-        Task<List<Consulta>> PegarTodasConsultaAsync();
-        Task<Consulta>PegarConsultaPeloIdMedicoAsync(int idMedico);
+        Task<List<Consulta>> PegarTodasConsultasAsync();
+
+        Task<Consulta>PegarConsultaPeloIdAsync(int idConsulta);
+
         Task NovaConsultaAsync(Consulta consulta);
+        Task AtualizarConsultaAsync(Consulta consulta);
         Task DeletarConsultaAsync(int id);
         
     }
