@@ -45,14 +45,14 @@ namespace MissAPI.Src.controladores
             }
         }
 
-        [HttpPost]
+        [HttpPost("novaConsulta")]
         public async Task<ActionResult> NovaConsultaAsync([FromBody] Consulta consulta)
         {
             await _repositorio.NovaConsultaAsync(consulta);
             return Created($"api/Consultas", consulta);
         }
 
-        [HttpPut]
+        [HttpPut("atualizarConsulta")]
         public async Task<ActionResult> AtualizarMedicoAsync([FromBody] Consulta consulta)
         {
             try

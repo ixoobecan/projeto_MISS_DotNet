@@ -17,16 +17,19 @@ namespace MissAPI.Src.modelos
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [ForeignKey("fk_usuario")]
-        public Usuario Usuario { get; set; }
-
-        [ForeignKey("fk_medico")]
-        public  Medico Medico { get; set; }
-
         [Required]
         public DateTime DataHora { get; set; }
 
         [Required]
-        public StatusConsulta StatusConsulta { get; set; }
+        public string Local { get; set; }
+
+        [Required]
+        public StatusConsulta Status { get; set; }
+
+        [ForeignKey("fk_usuario"), InverseProperty("ConsultasMarcadas")]
+        public Usuario Usuario { get; set; }
+
+        [ForeignKey("fk_medico"), InverseProperty("Consultas")]
+        public Medico Medico { get; set; }
     }
 }

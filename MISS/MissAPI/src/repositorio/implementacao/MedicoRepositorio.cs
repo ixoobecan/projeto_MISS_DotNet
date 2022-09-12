@@ -12,9 +12,7 @@ namespace MissAPI.Src.repositorio.implementacao
     {
 
         #region Atributos
-        private readonly MissContexto _contexto;
-
-        public object StatusDoacao { get; private set; }
+        private readonly MissContexto _contexto;        
         #endregion
 
 
@@ -45,14 +43,14 @@ namespace MissAPI.Src.repositorio.implementacao
         /// <exception cref="Exception">Caso não encontre a doação</exception>
         public async Task<Medico> PegarMedicoPeloIdAsync(int id)
         {
-            if (!ExisteId(id)) throw new Exception("Id do médico não encontrado");
+            if (!ExisteId(id)) throw new Exception("Id do médico não encontrado!");
 
-            return await _contexto.Medicos.FirstOrDefaultAsync(d => d.Id == id);
+            return await _contexto.Medicos.FirstOrDefaultAsync(i => i.Id == id);
 
             // função auxiliar
             bool ExisteId(int id)
             {
-                var auxiliar = _contexto.Medicos.FirstOrDefault(u => u.Id == id);
+                var auxiliar = _contexto.Medicos.FirstOrDefault(i => i.Id == id);
                 return auxiliar != null;
             }
         }
@@ -64,7 +62,16 @@ namespace MissAPI.Src.repositorio.implementacao
         /// <returns></returns>
         public async Task<Medico> PegarMedicoPelaEspecialidadeAsync(string especialidade)
         {
+            if (!ExisteEspecialidade(especialidade)) throw new Exception("Especialidade do médico não encontrado!");
+
             return await _contexto.Medicos.FirstOrDefaultAsync(e => e.Especialidade == especialidade);
+
+            // função auxiliar
+            bool ExisteEspecialidade(string especialidade)
+            {
+                var auxiliar = _contexto.Medicos.FirstOrDefault(e => e.Especialidade == especialidade);
+                return auxiliar != null;
+            }
         }
 
         /// <summary>
@@ -74,7 +81,16 @@ namespace MissAPI.Src.repositorio.implementacao
         /// <returns></returns>
         public async Task<Medico> PegarMedicoPeloCNPJAsync(string cnpj)
         {
+            if (!ExisteCNPJ(cnpj)) throw new Exception("CNPJ do médico não encontrado!");
+
             return await _contexto.Medicos.FirstOrDefaultAsync(c => c.CNPJ == cnpj);
+
+            // função auxiliar
+            bool ExisteCNPJ(string cnpj)
+            {
+                var auxiliar = _contexto.Medicos.FirstOrDefault(c => c.CNPJ == cnpj);
+                return auxiliar != null;
+            }
         }
 
         /// <summary>
@@ -99,7 +115,7 @@ namespace MissAPI.Src.repositorio.implementacao
         /// <summary>
         /// <para>Resumo: Método assíncrono para atualizar uma doacao</para>
         /// </summary>
-        /// <param name="doacao">AtualizarDoacao</param>
+        /// <param name="medico">AtualizarDoacao</param>
         public async Task AtualizarMedicoAsync(Medico medico)
         {
             var aux = await _contexto.Medicos.FirstOrDefaultAsync(m => m.Id == medico.Id);
@@ -110,7 +126,7 @@ namespace MissAPI.Src.repositorio.implementacao
             aux.Especialidade = medico.Especialidade;
             aux.Localizacao = medico.Localizacao;
 
-            _contexto.Update(medico);
+            _contexto.Medicos.Update(aux);
             await _contexto.SaveChangesAsync();
         }
 

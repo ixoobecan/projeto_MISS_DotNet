@@ -6,6 +6,7 @@ namespace MissAPI.Src.modelos.Enum
     public enum TipoUsuario
     {
         NORMAL,
+        MEDICO,
         ADMINISTRADOR
     }
 }

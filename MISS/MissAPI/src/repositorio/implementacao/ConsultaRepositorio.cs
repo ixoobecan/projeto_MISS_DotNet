@@ -32,8 +32,8 @@ namespace MissAPI.Src.repositorio.implementacao
         public async Task<List<Consulta>> PegarTodasConsultasAsync()
         {
             return await _contexto.Consultas
-                .Include(m => m.Medico)
                 .Include(u => u.Usuario)
+                .Include(m => m.Medico)
                 .ToListAsync();
         }
 
@@ -55,24 +55,25 @@ namespace MissAPI.Src.repositorio.implementacao
         /// <summary>
         /// <para>Resumo: Método assíncrono para salvar uma nova consulta</para>
         /// </summary>
-        /// <param name="dto">NovaConsultaDTO</param>
+        /// <param name="consulta">NovaConsultaDTO</param>
         public async Task NovaConsultaAsync(Consulta consulta)
         {
-            if (!ExisteIdMedico(consulta.Medico.Id)) throw new Exception("Id do médico não encontrado");
+            /*if (!ExisteIdMedico(consulta.Medico.Id)) throw new Exception("Id do médico não encontrado");
 
-            if (!ExisteIdUsuario(consulta.Usuario.Id)) throw new Exception("Id do paciente não encontrado");
+            if (!ExisteIdUsuario(consulta.Usuario.Id)) throw new Exception("Id do paciente não encontrado");*/
 
             await _contexto.Consultas.AddAsync(new Consulta
             {
-                Medico = await _contexto.Medicos.FirstOrDefaultAsync(m => m.Id == consulta.Medico.Id),
-                Usuario = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Id == consulta.Usuario.Id),
                 DataHora = consulta.DataHora,
-                StatusConsulta = consulta.StatusConsulta
+                Local = consulta.Local,
+                Status = consulta.Status,
+                Usuario = await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Id == consulta.Usuario.Id),
+                Medico = await _contexto.Medicos.FirstOrDefaultAsync(m => m.Id == consulta.Medico.Id)
             });
             await _contexto.SaveChangesAsync();
 
             // função auxiliar
-            bool ExisteIdMedico(int idMedico)
+            /*bool ExisteIdMedico(int idMedico)
             {
                 var auxiliar = _contexto.Medicos.FirstOrDefault(m => m.Id == idMedico);
                 return auxiliar != null;
@@ -82,7 +83,7 @@ namespace MissAPI.Src.repositorio.implementacao
             {
                 var auxiliar = _contexto.Usuarios.FirstOrDefault(d => d.Id == idUsuario);
                 return auxiliar != null;
-            }
+            }*/
         }
 
         public async Task AtualizarConsultaAsync(Consulta consulta)
@@ -90,7 +91,8 @@ namespace MissAPI.Src.repositorio.implementacao
             var aux = await _contexto.Consultas.FirstOrDefaultAsync(c => c.Id == consulta.Id);
             aux.Medico = consulta.Medico;
             aux.DataHora = consulta.DataHora;
-            aux.StatusConsulta = consulta.StatusConsulta;
+            aux.Local = consulta.Local;
+            aux.Status = consulta.Status;
 
             _contexto.Consultas.Update(aux);
             await _contexto.SaveChangesAsync();

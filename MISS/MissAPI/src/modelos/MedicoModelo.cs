@@ -1,7 +1,9 @@
 ﻿using MissAPI.Src.modelos.Enum;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MissAPI.Src.modelos
 {  /// <summary>
@@ -31,6 +33,8 @@ namespace MissAPI.Src.modelos
 
         public string Localizacao { get; set; }
 
+        [JsonIgnore, InverseProperty("Medico")]
+        public List<Consulta> Consultas { get; set; }
     }
 }
 

@@ -31,7 +31,7 @@ namespace MissAPI.Src.controladores
             return Ok(lista);
         }
 
-        [HttpGet("id/{idMedico}")]
+        [HttpGet("idMedico/{idMedico}")]
         public async Task<ActionResult> PegarMedicoPeloIdAsync([FromRoute] int idMedico)
         {
             try
@@ -70,14 +70,14 @@ namespace MissAPI.Src.controladores
             }
         }
 
-        [HttpPost]
+        [HttpPost("novoMedico")]
         public async Task<ActionResult> NovoMedicoAsync([FromBody] Medico medico)
         {
             await _repositorio.NovoMedicoAsync(medico);
             return Created($"api/Medicos", medico);
         }
 
-        [HttpPut]
+        [HttpPut("atualizarMedico")]
         public async Task<ActionResult> AtualizarMedicoAsync([FromBody] Medico medico)
         {
             try

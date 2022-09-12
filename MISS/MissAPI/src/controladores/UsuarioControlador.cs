@@ -65,9 +65,14 @@ namespace MissAPI.Src.controladores
         [HttpGet("email/{emailUsuario}")]
         public async Task<ActionResult> PegarUsuarioPeloEmailAsync([FromRoute] string emailUsuario)
         {
-            var usuario = await _repositorio.PegarUsuarioPeloEmailAsync(emailUsuario);
-            if (usuario == null) return NotFound(new { message = "Usuario não existe" });
-            return Ok(usuario);
+            try
+            {
+                return Ok(await _repositorio.PegarUsuarioPeloEmailAsync(emailUsuario));
+            }
+            catch(Exception ex)
+            {
+                return NotFound(new { Mensagem = ex.Message });
+            }
         }
 
         [HttpGet("cpf/{cpfUsuario}")]
@@ -83,7 +88,7 @@ namespace MissAPI.Src.controladores
             }
         }
 
-        [HttpPost]
+        [HttpPost("novoUsuario")]
         public async Task<ActionResult> NovoUsuarioAsync([FromBody] Usuario usuario)
         {
             await _repositorio.NovoUsuarioAsync(usuario);
@@ -91,7 +96,7 @@ namespace MissAPI.Src.controladores
         }
 
         
-        [HttpPut]
+        [HttpPut("atualizarUsuario")]
         public async Task<ActionResult> AtualizarUsuarioAsync([FromBody] Usuario usuario)
         {
             try

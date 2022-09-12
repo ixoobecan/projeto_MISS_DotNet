@@ -1,6 +1,8 @@
 ﻿using MissAPI.Src.modelos.Enum;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MissAPI.Src.modelos
 {    /// <summary>
@@ -38,6 +40,9 @@ namespace MissAPI.Src.modelos
 
         [Required]
         public TipoUsuario Tipo { get; set; }
+
+        [JsonIgnore, InverseProperty("Usuario")]
+        public List<Consulta> ConsultasMarcadas { get; set; }
     }
 }
 

@@ -46,14 +46,14 @@ namespace MissAPI.Src.repositorio.implementacao
         /// <exception cref="Exception">Caso não encontre o usuário</exception>
         public async Task<Usuario> PegarUsuarioPeloIdAsync(int id)
         {
-            if (!ExisteId(id)) throw new Exception("Id de usuário não encontrado");
+            if (!ExisteId(id)) throw new Exception("Id de usuário não encontrado!");
 
-            return await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Id == id);
+            return await _contexto.Usuarios.FirstOrDefaultAsync(i => i.Id == id);
 
             // função auxiliar
             bool ExisteId(int id)
             {
-                var auxiliar = _contexto.Usuarios.FirstOrDefault(u => u.Id == id);
+                var auxiliar = _contexto.Usuarios.FirstOrDefault(i => i.Id == id);
                 return auxiliar != null;
             }
         }
@@ -65,7 +65,16 @@ namespace MissAPI.Src.repositorio.implementacao
         /// <returns>Usuario</returns>
         public async Task<Usuario> PegarUsuarioPeloNomeAsync(string nome)
         {
+            if (!ExisteNome(nome)) throw new Exception("Nome de usuário não encontrado!");
+
             return await _contexto.Usuarios.FirstOrDefaultAsync(n => n.Nome == nome);
+
+            // função auxiliar
+            bool ExisteNome(string nome)
+            {
+                var auxiliar = _contexto.Usuarios.FirstOrDefault(n => n.Nome == nome);
+                return auxiliar != null;
+            }
         }
 
         /// <summary>
@@ -75,7 +84,17 @@ namespace MissAPI.Src.repositorio.implementacao
         /// <return>Usuario</return>
         public async Task<Usuario> PegarUsuarioPeloEmailAsync(string email)
         {
-            return await _contexto.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+            if (!ExisteEmail(email)) throw new Exception("Email do usuário não encontrado!");
+
+            return await _contexto.Usuarios.FirstOrDefaultAsync(e => e.Email == email);
+
+            // função auxiliar
+            bool ExisteEmail(string email)
+            {
+                var auxiliar = _contexto.Usuarios.FirstOrDefault(e => e.Email == email);
+                return auxiliar != null;
+            }
+
         }
 
         /// <summary>
@@ -85,7 +104,16 @@ namespace MissAPI.Src.repositorio.implementacao
         /// <returns></returns>
         public async Task<Usuario> PegarUsuarioPeloCPFAsync(string cpf)
         {
+            if (!ExisteCPF(cpf)) throw new Exception("CPF usuário não encontrado!");
+
             return await _contexto.Usuarios.FirstOrDefaultAsync(c => c.CPF == cpf);
+
+            // função auxiliar
+            bool ExisteCPF(string cpf)
+            {
+                var auxiliar = _contexto.Usuarios.FirstOrDefault(c => c.CPF == cpf);
+                return auxiliar != null;
+            }
         }
 
         /// <summary>
@@ -123,7 +151,7 @@ namespace MissAPI.Src.repositorio.implementacao
             aux.Endereco = usuario.Endereco;
             aux.CPF = usuario.CPF;
 
-            _contexto.Update(aux);
+            _contexto.Usuarios.Update(aux);
             await _contexto.SaveChangesAsync();
         }
 
