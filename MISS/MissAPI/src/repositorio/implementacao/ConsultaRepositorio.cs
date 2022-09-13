@@ -58,9 +58,9 @@ namespace MissAPI.Src.repositorio.implementacao
         /// <param name="consulta">NovaConsultaDTO</param>
         public async Task NovaConsultaAsync(Consulta consulta)
         {
-            /*if (!ExisteIdMedico(consulta.Medico.Id)) throw new Exception("Id do médico não encontrado");
+            if (!ExisteIdMedico(consulta.Medico.Id)) throw new Exception("Id do médico não encontrado");
 
-            if (!ExisteIdUsuario(consulta.Usuario.Id)) throw new Exception("Id do paciente não encontrado");*/
+            if (!ExisteIdUsuario(consulta.Usuario.Id)) throw new Exception("Id do paciente não encontrado");
 
             await _contexto.Consultas.AddAsync(new Consulta
             {
@@ -73,7 +73,7 @@ namespace MissAPI.Src.repositorio.implementacao
             await _contexto.SaveChangesAsync();
 
             // função auxiliar
-            /*bool ExisteIdMedico(int idMedico)
+            bool ExisteIdMedico(int idMedico)
             {
                 var auxiliar = _contexto.Medicos.FirstOrDefault(m => m.Id == idMedico);
                 return auxiliar != null;
@@ -83,7 +83,7 @@ namespace MissAPI.Src.repositorio.implementacao
             {
                 var auxiliar = _contexto.Usuarios.FirstOrDefault(d => d.Id == idUsuario);
                 return auxiliar != null;
-            }*/
+            }
         }
 
         public async Task AtualizarConsultaAsync(Consulta consulta)

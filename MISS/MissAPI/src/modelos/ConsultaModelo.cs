@@ -10,26 +10,22 @@ namespace MissAPI.Src.modelos
     /// <para>Versão: 1.0</para>
     /// <para>Data: 06/09/2022</para>
     /// </summary>
-
     [Table("tb_consultas")]
     public class Consulta
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Required]
         public DateTime DataHora { get; set; }
 
-        [Required]
         public string Local { get; set; }
 
-        [Required]
         public StatusConsulta Status { get; set; }
 
-        [ForeignKey("fk_usuario"), InverseProperty("ConsultasMarcadas")]
+        [ForeignKey("fk_usuario")]
         public Usuario Usuario { get; set; }
 
-        [ForeignKey("fk_medico"), InverseProperty("Consultas")]
+        [ForeignKey("fk_medico")]
         public Medico Medico { get; set; }
     }
 }

@@ -32,7 +32,7 @@ namespace MissAPI.Src.controladores
             return Ok(lista);
         }
 
-        [HttpGet("id/{idConsulta}")]
+        [HttpGet("idConsulta/{idConsulta}")]
         public async Task<ActionResult> PegarMedicoPeloIdAsync([FromRoute] int idConsulta)
         {
             try
