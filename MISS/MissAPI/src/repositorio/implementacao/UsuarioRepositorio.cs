@@ -84,16 +84,8 @@ namespace MissAPI.Src.repositorio.implementacao
         /// <return>Usuario</return>
         public async Task<Usuario> PegarUsuarioPeloEmailAsync(string email)
         {
-            if (!ExisteEmail(email)) throw new Exception("Email do usuário não encontrado!");
 
             return await _contexto.Usuarios.FirstOrDefaultAsync(e => e.Email == email);
-
-            // função auxiliar
-            bool ExisteEmail(string email)
-            {
-                var auxiliar = _contexto.Usuarios.FirstOrDefault(e => e.Email == email);
-                return auxiliar != null;
-            }
 
         }
 

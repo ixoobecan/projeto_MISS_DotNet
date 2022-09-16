@@ -1,4 +1,4 @@
-﻿using MissAPI.Src.modelos.Enum;
+﻿using MissAPI.Src.Utlidades;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -31,10 +31,17 @@ namespace MissAPI.Src.modelos
 
         public string CPF { get; set; }
 
+        [Required]
         public TipoUsuario Tipo { get; set; }
 
         [JsonIgnore, InverseProperty("Usuario")]
         public List<Consulta> ConsultasMarcadas { get; set; }
+    }
+
+    public class UserLogin
+    {
+        public string Email { get; set; }
+        public string Senha { get; set; }
     }
 }
 

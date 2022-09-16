@@ -22,6 +22,13 @@ namespace MissAPI.Src.controladores
         }
         #endregion
 
+        /// <summary> 
+        /// Pegar todos os médicos
+        /// </summary>
+        /// <para> Resumo: Método assincrono para pegar todos os médicos</para>
+        /// <returns>ActionResult</returns> 
+        /// <response code="200">Retorna todos os médicos</response> 
+        /// <response code="403">Médico não autorizado</response>
         #region Metodos
         [HttpGet("todosMedicos")]
         public async Task<ActionResult> PegarTodosMedicosAsync()
@@ -31,6 +38,13 @@ namespace MissAPI.Src.controladores
             return Ok(lista);
         }
 
+        /// <summary>
+        /// Pegar médico pelo Id
+        /// </summary>
+        /// <param name="idMedico">Id do médico</param>
+        /// <returns>ActionResult</returns>
+        /// <response code="200">Usuário encontrado</response> 
+        /// <response code="404">Id não existente</response>
         [HttpGet("idMedico/{idMedico}")]
         public async Task<ActionResult> PegarMedicoPeloIdAsync([FromRoute] int idMedico)
         {
@@ -44,6 +58,13 @@ namespace MissAPI.Src.controladores
             }
         }
 
+        /// <summary> 
+        /// Pegar médico pela especialidade
+        /// </summary> 
+        /// <param name="especialidadeMedico">Especialidade do médico</param> 
+        /// <returns>ActionResult</returns> 
+        /// <response code="200">Especialidade encontrada</response> 
+        /// <response code="404">Especialidade não existente</response>
         [HttpGet("especialidade/{especialidadeMedico}")]
         public async Task<ActionResult> PegarMedicoPelaEspecialidadeAsync([FromRoute] string especialidadeMedico)
         {
@@ -57,6 +78,13 @@ namespace MissAPI.Src.controladores
             }
         }
 
+        /// <summary> 
+        /// Pegar médico pelo CNPJ
+        /// </summary> 
+        /// <param name="cnpjMedico">CNPJ do médico</param> 
+        /// <returns>ActionResult</returns> 
+        /// <response code="200">CNPJ encontrado</response> 
+        /// <response code="404">CNPJ não existente</response>
         [HttpGet("cnpj/{cnpjMedico}")]
         public async Task<ActionResult> PegarMedicoPeloCNPJAsync([FromRoute] string cnpjMedico)
         {
@@ -70,6 +98,28 @@ namespace MissAPI.Src.controladores
             }
         }
 
+        /// <summary>
+        /// Criar novo Médico
+        /// </summary> 
+        /// <param name="medico">Contrutor para criar médico</param> 
+        /// <returns>ActionResult</returns> 
+        /// <remarks> 
+        /// Exemplo de requisição: 
+        /// 
+        ///     POST /api/Medicos/novoMedico
+        ///     { 
+        ///         "nome": "Nome do medico",
+        ///         "descricao": "descricao do médico",
+        ///         "contato": "1122334455",
+        ///         "dataHora": "1999-09-06",
+        ///         "especialidade": "Especialidade",
+        ///         "cnpj": "00.112.112/001-39",
+        ///         "localizacao": "Rua 1, n 123"
+        ///     } 
+        ///     
+        /// </remarks> 
+        /// <response code="201">Retorna médico criado</response> 
+        /// <response code="422">Médico ja cadastrado</response>
         [HttpPost("novoMedico")]
         public async Task<ActionResult> NovoMedicoAsync([FromBody] Medico medico)
         {
@@ -77,6 +127,29 @@ namespace MissAPI.Src.controladores
             return Created($"api/Medicos", medico);
         }
 
+        /// <summary>
+        /// Atualizar Médico
+        /// </summary> 
+        /// <param name="medico">Construtor para atualizar Médico</param> 
+        /// <returns>ActionResult</returns> 
+        /// <remarks> 
+        /// Exemplo de requisição: 
+        /// 
+        ///     PUT /api/Medicos/atualizarMedico 
+        ///     { 
+        ///         "id": 0,
+        ///         "nome": "Nome do medico",
+        ///         "descricao": "descricao do médico",
+        ///         "contato": "1122334455",
+        ///         "dataHora": "1999-09-06",
+        ///         "especialidade": "Especialidade",
+        ///         "cnpj": "00.112.112/001-39",
+        ///         "localizacao": "Rua 1, n 123"
+        ///     }
+        ///     
+        /// </remarks> 
+        /// <response code="200">Médico atualizado</response> 
+        /// <response code="400">Erro na requisição</response>
         [HttpPut("atualizarMedico")]
         public async Task<ActionResult> AtualizarMedicoAsync([FromBody] Medico medico)
         {
@@ -91,6 +164,14 @@ namespace MissAPI.Src.controladores
             }
         }
 
+        /// <summary>
+        /// Deletar médico
+        /// <para>Função assíncrona para deletar médico pelo Id</para>
+        /// </summary>
+        /// <param name="idMedico"></param>
+        /// <returns>ActionResult</returns>
+        /// <response code="204">Médico deletado</response>
+        /// <response code="404">Id do médico não existe</response>
         [HttpDelete("deletarMedico/{idMedico}")]
         public async Task<ActionResult> DeletarMedicoAsync([FromRoute] int idMedico)
         {

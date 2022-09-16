@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MissAPI.Src.modelos.Enum
+namespace MissAPI.Src.Utlidades
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum TipoUsuario

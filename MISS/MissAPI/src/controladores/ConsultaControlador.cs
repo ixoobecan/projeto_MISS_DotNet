@@ -24,6 +24,13 @@ namespace MissAPI.Src.controladores
         #endregion
 
         #region Metodos
+        /// <summary> 
+        /// Pegar todos as consultas
+        /// </summary>
+        /// <para> Resumo: Método assincrono para pegar todas as consultas</para>
+        /// <returns>ActionResult</returns> 
+        /// <response code="200">Retorna todos as consultas</response> 
+        /// <response code="403">Usuário não autorizado</response>
         [HttpGet("todasConsultas")]
         public async Task<ActionResult> PegarTodasConsultasAsync()
         {
@@ -32,6 +39,13 @@ namespace MissAPI.Src.controladores
             return Ok(lista);
         }
 
+        /// <summary>
+        /// Pegar consulta pelo Id
+        /// </summary>
+        /// <param name="idConsulta">Id da consulta</param>
+        /// <returns>ActionResult</returns>
+        /// <response code="200">Consulta encontrada</response> 
+        /// <response code="404">Id não existente</response>
         [HttpGet("idConsulta/{idConsulta}")]
         public async Task<ActionResult> PegarMedicoPeloIdAsync([FromRoute] int idConsulta)
         {
@@ -45,6 +59,30 @@ namespace MissAPI.Src.controladores
             }
         }
 
+        /// <summary>
+        /// Criar uma nova consulta
+        /// </summary> 
+        /// <param name="consulta">Contrutor para criar uma nova consulta</param> 
+        /// <returns>ActionResult</returns> 
+        /// <remarks> 
+        /// Exemplo de requisição: 
+        /// 
+        ///     POST /api/Consultas/novaConsulta
+        ///     { 
+        ///         "dataHora": "2022-09-15",
+        ///         "local": "Rua 1, n 123",
+        ///         "status": "ATIVO",
+        ///         "usuario": {
+        ///             "id": 0
+        ///         },
+        ///         "medico":{
+        ///             "id": 0
+        ///         }
+        ///     } 
+        ///     
+        /// </remarks> 
+        /// <response code="201">Retorna médico criado</response> 
+        /// <response code="422">Médico ja cadastrado</response>
         [HttpPost("novaConsulta")]
         public async Task<ActionResult> NovaConsultaAsync([FromBody] Consulta consulta)
         {
@@ -52,6 +90,31 @@ namespace MissAPI.Src.controladores
             return Created($"api/Consultas", consulta);
         }
 
+        /// <summary>
+        /// Atualizar Consulta
+        /// </summary> 
+        /// <param name="consulta">Construtor para atualizar consulta</param> 
+        /// <returns>ActionResult</returns> 
+        /// <remarks> 
+        /// Exemplo de requisição: 
+        /// 
+        ///     PUT /api/Consultas/atualizarConsulta 
+        ///     { 
+        ///         "id": 0,
+        ///         "dataHora": "2022-09-15",
+        ///         "local": "Rua 1, n 123",
+        ///         "status": "ATIVO",
+        ///         "usuario": {
+        ///             "id": 0
+        ///         },
+        ///         "medico":{
+        ///             "id": 0
+        ///         }
+        ///     }
+        ///     
+        /// </remarks> 
+        /// <response code="200">Consulta atualizado</response> 
+        /// <response code="400">Erro na requisição</response>
         [HttpPut("atualizarConsulta")]
         public async Task<ActionResult> AtualizarMedicoAsync([FromBody] Consulta consulta)
         {
@@ -66,6 +129,14 @@ namespace MissAPI.Src.controladores
             }
         }
 
+        /// <summary>
+        /// Deletar médico
+        /// <para>Função assíncrona para deletar médico pelo Id</para>
+        /// </summary>
+        /// <param name="idConsulta"></param>
+        /// <returns>ActionResult</returns>
+        /// <response code="204">Consulta deletado</response>
+        /// <response code="404">Id da consulta não existe</response>
         [HttpDelete("deletarConsulta/{idConsulta}")]
         public async Task<ActionResult> DeletarMedicoAsync([FromRoute] int idConsulta)
         {
